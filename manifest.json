@@ -1,0 +1,10 @@
+{
+	"id": "perplexity-bridge",
+	"name": "Perplexity Research Bridge",
+	"version": "0.1.0",
+	"minAppVersion": "1.5.0",
+	"description": "Run Perplexity research from Obsidian and import research threads as structured wiki-ready notes with citations.",
+	"author": "End User",
+	"authorUrl": "https://enduser.dev",
+	"isDesktopOnly": true
+}
