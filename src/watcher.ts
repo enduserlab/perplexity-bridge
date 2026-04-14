@@ -39,11 +39,11 @@ export class ResearchWatcher {
 		await this.ensureFolder(this.settings.spacesImportPath);
 		await this.ensureFolder(this.settings.artifactsImportPath);
 		await this.ensureFolder(this.settings.outputPath);
-		await this.scanExisting();
+		this.scanExisting();
 
 		if (this.settings.watchImportFolder) {
 			this.pollInterval = window.setInterval(
-				() => this.poll(),
+				() => { void this.poll(); },
 				this.settings.pollIntervalSeconds * 1000
 			);
 		}
@@ -84,7 +84,7 @@ export class ResearchWatcher {
 		await this.ensureFolder(this.settings.importPath);
 		await this.app.vault.create(filepath, content);
 
-		new Notice("Perplexity Bridge: Saved clipboard content. Processing...");
+		new Notice("Saved clipboard content. Processing...");
 
 		const file = this.app.vault.getAbstractFileByPath(filepath);
 		if (file instanceof TFile) {
@@ -92,7 +92,7 @@ export class ResearchWatcher {
 		}
 	}
 
-	private async scanExisting(): Promise<void> {
+	private scanExisting(): void {
 		const folders = [
 			this.settings.importPath,
 			this.settings.spacesImportPath,
@@ -147,7 +147,7 @@ export class ResearchWatcher {
 			if (newFiles.length === 0) return;
 
 			new Notice(
-				`Perplexity Bridge: ${newFiles.length} new file(s) detected`
+				`${newFiles.length} new file(s) detected`
 			);
 
 			for (const file of newFiles) {
@@ -186,7 +186,7 @@ export class ResearchWatcher {
 				case "computer-artifact":
 					await this.artifactHandler.processArtifact(file);
 					new Notice(
-						`Perplexity Bridge: Catalogued artifact "${file.name}"`
+						`Catalogued artifact "${file.name}"`
 					);
 					break;
 
@@ -200,7 +200,7 @@ export class ResearchWatcher {
 
 			this.processedFiles.add(file.path);
 		} catch {
-			new Notice(`Perplexity Bridge: Error processing "${file.name}"`);
+			new Notice(`Error processing "${file.name}"`);
 			this.processedFiles.add(file.path);
 		}
 	}
@@ -232,11 +232,11 @@ export class ResearchWatcher {
 			}
 
 			new Notice(
-				`Perplexity Bridge: Created "${research.title}" in ${this.settings.outputPath}`
+				`Created "${research.title}" in ${this.settings.outputPath}`
 			);
 
 			if (!this.settings.keepRawImport) {
-				await this.app.vault.delete(file);
+				await this.app.fileManager.trashFile(file);
 			}
 		}
 	}
@@ -273,11 +273,11 @@ export class ResearchWatcher {
 			}
 
 			new Notice(
-				`Perplexity Bridge: Created Space "${structured.name}" with ${pages.size} pages`
+				`Created space "${structured.name}" with ${pages.size} pages`
 			);
 
 			if (!this.settings.keepRawImport) {
-				await this.app.vault.delete(file);
+				await this.app.fileManager.trashFile(file);
 			}
 		}
 	}

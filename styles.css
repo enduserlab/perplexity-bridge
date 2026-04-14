@@ -1,0 +1,15 @@
+/* Perplexity Bridge plugin styles */
+
+.perplexity-bridge-api-key-input {
+	width: 260px;
+}
+
+.perplexity-bridge-textarea-wide {
+	width: 100%;
+	min-width: 350px;
+}
+
+.perplexity-bridge-prompt-textarea {
+	font-family: monospace;
+	width: 100%;
+}

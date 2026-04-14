@@ -13,17 +13,17 @@ export class PerplexityBridgeSettingTab extends PluginSettingTab {
 		const { containerEl } = this;
 		containerEl.empty();
 
-		// --- Perplexity API ---
-		new Setting(containerEl).setName("Perplexity API").setHeading();
+		// --- Research API ---
+		new Setting(containerEl).setName("Research API").setHeading();
 
 		new Setting(containerEl)
 			.setName("API key")
 			.setDesc(
-				"Your Perplexity API key for running research queries directly from Obsidian."
+				"Your research API key for running queries."
 			)
 			.addText((text) => {
 				text.inputEl.type = "password";
-				text.inputEl.style.width = "260px";
+				text.inputEl.addClass("perplexity-bridge-api-key-input");
 				text
 					.setPlaceholder("pplx-...")
 					.setValue(this.plugin.settings.perplexityApiKey)
@@ -35,7 +35,7 @@ export class PerplexityBridgeSettingTab extends PluginSettingTab {
 
 		new Setting(containerEl)
 			.setName("Model")
-			.setDesc("Perplexity model for research queries.")
+			.setDesc("Model for research queries.")
 			.addDropdown((dropdown) =>
 				dropdown
 					.addOption("sonar", "Sonar (fast, lightweight)")
@@ -51,15 +51,15 @@ export class PerplexityBridgeSettingTab extends PluginSettingTab {
 					})
 			);
 
-		// --- Claude API ---
-		new Setting(containerEl).setName("Claude API").setHeading();
+		// --- Structuring API ---
+		new Setting(containerEl).setName("Structuring API").setHeading();
 
 		new Setting(containerEl)
 			.setName("API key")
-			.setDesc("Your Anthropic API key for research structuring.")
+			.setDesc("Your structuring API key for organizing research.")
 			.addText((text) => {
 				text.inputEl.type = "password";
-				text.inputEl.style.width = "260px";
+				text.inputEl.addClass("perplexity-bridge-api-key-input");
 				text
 					.setPlaceholder("sk-ant-...")
 					.setValue(this.plugin.settings.claudeApiKey)
@@ -71,7 +71,7 @@ export class PerplexityBridgeSettingTab extends PluginSettingTab {
 
 		new Setting(containerEl)
 			.setName("Model")
-			.setDesc("Claude model for structuring research.")
+			.setDesc("Model for structuring research.")
 			.addDropdown((dropdown) =>
 				dropdown
 					.addOption("claude-sonnet-4-20250514", "Claude Sonnet 4")
@@ -89,7 +89,7 @@ export class PerplexityBridgeSettingTab extends PluginSettingTab {
 		new Setting(containerEl)
 			.setName("Import folder")
 			.setDesc(
-				"Where raw Perplexity exports land. Drop markdown files here or use the clipboard import command."
+				"Where raw exports land. Drop markdown files here or use the clipboard import command."
 			)
 			.addText((text) =>
 				text
@@ -116,7 +116,7 @@ export class PerplexityBridgeSettingTab extends PluginSettingTab {
 
 		new Setting(containerEl)
 			.setName("Spaces import folder")
-			.setDesc("Subfolder for Perplexity Space exports.")
+			.setDesc("Subfolder for space exports.")
 			.addText((text) =>
 				text
 					.setPlaceholder("_inbox/perplexity/spaces")
@@ -129,7 +129,7 @@ export class PerplexityBridgeSettingTab extends PluginSettingTab {
 
 		new Setting(containerEl)
 			.setName("Spaces output folder")
-			.setDesc("Where structured Space pages are created.")
+			.setDesc("Where structured space pages are created.")
 			.addText((text) =>
 				text
 					.setPlaceholder("wiki/spaces")
@@ -142,7 +142,7 @@ export class PerplexityBridgeSettingTab extends PluginSettingTab {
 
 		new Setting(containerEl)
 			.setName("Artifacts folder")
-			.setDesc("Where Computer/Comet artifacts and companion notes are stored.")
+			.setDesc("Where artifacts and companion notes are stored.")
 			.addText((text) =>
 				text
 					.setPlaceholder("raw/perplexity")
@@ -159,7 +159,7 @@ export class PerplexityBridgeSettingTab extends PluginSettingTab {
 		new Setting(containerEl)
 			.setName("Structure API results")
 			.setDesc(
-				"Also run Claude structuring on Perplexity API research results to extract findings, tags, and wiki links."
+				"Also run structuring on API research results to extract findings, tags, and wiki links."
 			)
 			.addToggle((toggle) =>
 				toggle
@@ -173,7 +173,7 @@ export class PerplexityBridgeSettingTab extends PluginSettingTab {
 		new Setting(containerEl)
 			.setName("Auto-structure imports")
 			.setDesc(
-				"Automatically send new file imports to Claude for structuring."
+				"Automatically send new file imports for structuring."
 			)
 			.addToggle((toggle) =>
 				toggle
@@ -213,7 +213,7 @@ export class PerplexityBridgeSettingTab extends PluginSettingTab {
 		new Setting(containerEl)
 			.setName("Keep raw imports")
 			.setDesc(
-				"Keep the original Perplexity export after creating the structured page."
+				"Keep the original export after creating the structured page."
 			)
 			.addToggle((toggle) =>
 				toggle
@@ -230,12 +230,11 @@ export class PerplexityBridgeSettingTab extends PluginSettingTab {
 		new Setting(containerEl)
 			.setName("Custom structuring prompt")
 			.setDesc(
-				"Override the default prompt for Claude. Use {THREAD_CONTENT} as a placeholder. Leave blank for the default."
+				"Override the default structuring prompt. Use {THREAD_CONTENT} as a placeholder. Leave blank for the default."
 			)
 			.addTextArea((text) => {
 				text.inputEl.rows = 10;
-				text.inputEl.style.fontFamily = "monospace";
-				text.inputEl.style.width = "100%";
+				text.inputEl.addClass("perplexity-bridge-prompt-textarea");
 				text
 					.setPlaceholder("Leave blank for default prompt")
 					.setValue(this.plugin.settings.structuringPrompt)

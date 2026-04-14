@@ -28,11 +28,11 @@ export default class PerplexityBridgePlugin extends Plugin {
 		// Ribbon icon — quick research
 		this.addRibbonIcon(
 			"search",
-			"Perplexity Bridge: Research",
-			async () => {
+			"Research",
+			() => {
 				if (!this.settings.perplexityApiKey) {
 					new Notice(
-						"Perplexity Bridge: Set your Perplexity API key in settings."
+						"Set your API key in settings."
 					);
 					return;
 				}
@@ -46,11 +46,11 @@ export default class PerplexityBridgePlugin extends Plugin {
 
 		this.addCommand({
 			id: "research-query",
-			name: "Research with Perplexity",
+			name: "Research query",
 			callback: () => {
 				if (!this.settings.perplexityApiKey) {
 					new Notice(
-						"Perplexity Bridge: Set your Perplexity API key in settings."
+						"Set your API key in settings."
 					);
 					return;
 				}
@@ -60,11 +60,11 @@ export default class PerplexityBridgePlugin extends Plugin {
 
 		this.addCommand({
 			id: "deep-research",
-			name: "Deep research with Perplexity",
+			name: "Deep research query",
 			callback: () => {
 				if (!this.settings.perplexityApiKey) {
 					new Notice(
-						"Perplexity Bridge: Set your Perplexity API key in settings."
+						"Set your API key in settings."
 					);
 					return;
 				}
@@ -74,17 +74,17 @@ export default class PerplexityBridgePlugin extends Plugin {
 
 		this.addCommand({
 			id: "research-selection",
-			name: "Research selected text with Perplexity",
-			editorCallback: async (editor) => {
+			name: "Research selected text",
+			editorCallback: (editor) => {
 				if (!this.settings.perplexityApiKey) {
 					new Notice(
-						"Perplexity Bridge: Set your Perplexity API key in settings."
+						"Set your API key in settings."
 					);
 					return;
 				}
 				const selection = editor.getSelection().trim();
 				if (!selection) {
-					new Notice("Perplexity Bridge: No text selected.");
+					new Notice("No text selected.");
 					return;
 				}
 				this.openResearchModal(false, selection);
@@ -105,7 +105,7 @@ export default class PerplexityBridgePlugin extends Plugin {
 
 		this.addCommand({
 			id: "import-space",
-			name: "Import Perplexity Space from clipboard",
+			name: "Import space from clipboard",
 			callback: async () => {
 				await this.importSpaceFromClipboard();
 			},
@@ -116,7 +116,7 @@ export default class PerplexityBridgePlugin extends Plugin {
 			name: "Structure current file as research",
 			editorCallback: async (_editor, view) => {
 				if (view.file) {
-					new Notice("Perplexity Bridge: Structuring...");
+					new Notice("Structuring...");
 					await this.watcher?.processFileByPath(view.file.path);
 				}
 			},
@@ -126,7 +126,7 @@ export default class PerplexityBridgePlugin extends Plugin {
 			id: "process-import-folder",
 			name: "Process all files in import folder",
 			callback: async () => {
-				new Notice("Perplexity Bridge: Processing import folder...");
+				new Notice("Processing import folder...");
 				await this.watcher?.restart();
 			},
 		});
@@ -149,7 +149,7 @@ export default class PerplexityBridgePlugin extends Plugin {
 
 		this.addCommand({
 			id: "open-spaces-folder",
-			name: "Open Spaces output folder",
+			name: "Open spaces output folder",
 			callback: () => this.openFolder(this.settings.spacesOutputPath),
 		});
 
@@ -168,7 +168,7 @@ export default class PerplexityBridgePlugin extends Plugin {
 	private openResearchModal(deep = false, prefill = ""): void {
 		new ResearchModal(
 			this.app,
-			(request) => this.executeResearch(request),
+			(request) => { void this.executeResearch(request); },
 			{ deep, prefill }
 		).open();
 	}
@@ -176,7 +176,7 @@ export default class PerplexityBridgePlugin extends Plugin {
 	private async executeResearch(request: ResearchRequest): Promise<void> {
 		const label = request.deep ? "Deep research" : "Research";
 		new Notice(
-			`Perplexity Bridge: ${label} started...${request.deep ? " This may take a minute." : ""}`
+			`${label} started...${request.deep ? " This may take a minute." : ""}`
 		);
 
 		try {
@@ -257,18 +257,18 @@ export default class PerplexityBridgePlugin extends Plugin {
 			}
 
 			new Notice(
-				`Perplexity Bridge: "${title}" saved with ${response.citations.length} sources`
+				`"${title}" saved with ${response.citations.length} sources`
 			);
 		} catch (err) {
 			const msg = err instanceof Error ? err.message : String(err);
 			if (msg.includes("401") || msg.includes("Unauthorized")) {
 				new Notice(
-					"Perplexity Bridge: Invalid API key. Check settings."
+					"Invalid API key. Check settings."
 				);
 			} else if (msg.includes("429")) {
-				new Notice("Perplexity Bridge: Rate limited. Try again later.");
+				new Notice("Rate limited. Try again later.");
 			} else {
-				new Notice(`Perplexity Bridge: Research failed — ${msg}`);
+				new Notice(`Research failed — ${msg}`);
 			}
 		}
 	}
@@ -281,19 +281,19 @@ export default class PerplexityBridgePlugin extends Plugin {
 		try {
 			const content = await navigator.clipboard.readText();
 			if (!content.trim()) {
-				new Notice("Perplexity Bridge: Clipboard is empty.");
+				new Notice("Clipboard is empty.");
 				return;
 			}
 			if (content.length < 50) {
 				new Notice(
-					"Perplexity Bridge: Content too short — doesn't look like research."
+					"Content too short — doesn't look like research."
 				);
 				return;
 			}
 			await this.watcher?.processClipboard(content);
 		} catch {
 			new Notice(
-				"Perplexity Bridge: Could not read clipboard. Try Ctrl/Cmd+V instead."
+				"Could not read clipboard. Try Ctrl/Cmd+V instead."
 			);
 		}
 	}
@@ -302,7 +302,7 @@ export default class PerplexityBridgePlugin extends Plugin {
 		try {
 			const content = await navigator.clipboard.readText();
 			if (!content.trim()) {
-				new Notice("Perplexity Bridge: Clipboard is empty.");
+				new Notice("Clipboard is empty.");
 				return;
 			}
 
@@ -317,10 +317,10 @@ export default class PerplexityBridgePlugin extends Plugin {
 
 			await this.ensureFolder(this.settings.spacesImportPath);
 			await this.app.vault.create(filepath, content);
-			new Notice("Perplexity Bridge: Space saved. Processing...");
+			new Notice("Space saved. Processing...");
 			await this.watcher?.processFileByPath(filepath);
 		} catch {
-			new Notice("Perplexity Bridge: Could not read clipboard.");
+			new Notice("Could not read clipboard.");
 		}
 	}
 
@@ -334,9 +334,9 @@ export default class PerplexityBridgePlugin extends Plugin {
 			.filter((f) => f.path.startsWith(path));
 		if (files.length > 0) {
 			const leaf = this.app.workspace.getLeaf(false);
-			leaf.openFile(files[0]);
+			void leaf.openFile(files[0]);
 		} else {
-			new Notice(`Perplexity Bridge: No files in "${path}" yet.`);
+			new Notice(`No files in "${path}" yet.`);
 		}
 	}
 

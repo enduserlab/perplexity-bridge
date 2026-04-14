@@ -2,7 +2,6 @@ import { requestUrl } from "obsidian";
 import type {
 	ParsedThread,
 	StructuredResearch,
-	Citation,
 	PerplexityBridgeSettings,
 } from "./types";
 

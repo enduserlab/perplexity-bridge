@@ -45,9 +45,9 @@ function extractTurns(content: string): ThreadTurn[] {
 	if (headerMatches.length >= 1) {
 		for (let i = 0; i < headerMatches.length; i++) {
 			const query = headerMatches[i][1].trim();
-			const start = headerMatches[i].index! + headerMatches[i][0].length;
+			const start = (headerMatches[i].index ?? 0) + headerMatches[i][0].length;
 			const end = i + 1 < headerMatches.length
-				? headerMatches[i + 1].index!
+				? (headerMatches[i + 1].index ?? content.length)
 				: content.length;
 
 			const response = content.slice(start, end).trim();

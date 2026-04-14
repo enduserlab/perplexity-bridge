@@ -63,9 +63,9 @@ export function parseSpaceFromMarkdown(
 
 	if (h1Matches.length > 1) {
 		for (let i = 0; i < h1Matches.length; i++) {
-			const start = h1Matches[i].index!;
+			const start = h1Matches[i].index ?? 0;
 			const end = i + 1 < h1Matches.length
-				? h1Matches[i + 1].index!
+				? (h1Matches[i + 1].index ?? content.length)
 				: content.length;
 
 			const threadContent = content.slice(start, end).trim();

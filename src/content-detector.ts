@@ -8,7 +8,6 @@ export function detectContentType(
 	content: string,
 	filename: string
 ): PerplexityContentType {
-	const lower = content.toLowerCase();
 	const ext = filename.split(".").pop()?.toLowerCase() || "";
 
 	// Non-markdown files are likely Computer/Comet artifacts

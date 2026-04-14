@@ -32,8 +32,8 @@ export class ResearchModal extends Modal {
 
 		contentEl.createEl("h3", {
 			text: this.deep
-				? "Perplexity Deep Research"
-				: "Research with Perplexity",
+				? "Deep research"
+				: "Research query",
 		});
 
 		// Query input
@@ -41,8 +41,7 @@ export class ResearchModal extends Modal {
 			.setName("Query")
 			.addTextArea((text) => {
 				text.inputEl.rows = 3;
-				text.inputEl.style.width = "100%";
-				text.inputEl.style.minWidth = "350px";
+				text.inputEl.addClass("perplexity-bridge-textarea-wide");
 				text
 					.setPlaceholder("What would you like to research?")
 					.setValue(this.query)
