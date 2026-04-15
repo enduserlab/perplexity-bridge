@@ -25,7 +25,7 @@ export class PerplexityBridgeSettingTab extends PluginSettingTab {
 				text.inputEl.type = "password";
 				text.inputEl.addClass("perplexity-bridge-api-key-input");
 				text
-					.setPlaceholder("pplx-...")
+					.setPlaceholder("Enter API key")
 					.setValue(this.plugin.settings.perplexityApiKey)
 					.onChange(async (value) => {
 						this.plugin.settings.perplexityApiKey = value;
@@ -39,10 +39,10 @@ export class PerplexityBridgeSettingTab extends PluginSettingTab {
 			.addDropdown((dropdown) =>
 				dropdown
 					.addOption("sonar", "Sonar (fast, lightweight)")
-					.addOption("sonar-pro", "Sonar Pro (deeper retrieval)")
+					.addOption("sonar-pro", "Sonar pro (deeper retrieval)")
 					.addOption(
 						"sonar-reasoning-pro",
-						"Sonar Reasoning Pro (chain-of-thought)"
+						"Sonar reasoning pro (chain-of-thought)"
 					)
 					.setValue(this.plugin.settings.perplexityModel)
 					.onChange(async (value) => {
@@ -61,7 +61,7 @@ export class PerplexityBridgeSettingTab extends PluginSettingTab {
 				text.inputEl.type = "password";
 				text.inputEl.addClass("perplexity-bridge-api-key-input");
 				text
-					.setPlaceholder("sk-ant-...")
+					.setPlaceholder("Enter API key")
 					.setValue(this.plugin.settings.claudeApiKey)
 					.onChange(async (value) => {
 						this.plugin.settings.claudeApiKey = value;
@@ -74,8 +74,8 @@ export class PerplexityBridgeSettingTab extends PluginSettingTab {
 			.setDesc("Model for structuring research.")
 			.addDropdown((dropdown) =>
 				dropdown
-					.addOption("claude-sonnet-4-20250514", "Claude Sonnet 4")
-					.addOption("claude-haiku-4-5-20251001", "Claude Haiku 4.5 (faster, cheaper)")
+					.addOption("claude-sonnet-4-20250514", "Sonnet 4")
+					.addOption("claude-haiku-4-5-20251001", "Haiku 4.5 (faster, cheaper)")
 					.setValue(this.plugin.settings.claudeModel)
 					.onChange(async (value) => {
 						this.plugin.settings.claudeModel = value;
@@ -89,7 +89,7 @@ export class PerplexityBridgeSettingTab extends PluginSettingTab {
 		new Setting(containerEl)
 			.setName("Import folder")
 			.setDesc(
-				"Where raw exports land. Drop markdown files here or use the clipboard import command."
+				"Drop files here or use the clipboard import command."
 			)
 			.addText((text) =>
 				text
@@ -106,7 +106,7 @@ export class PerplexityBridgeSettingTab extends PluginSettingTab {
 			.setDesc("Where structured research pages are created.")
 			.addText((text) =>
 				text
-					.setPlaceholder("wiki/research")
+					.setPlaceholder("Example: wiki/research")
 					.setValue(this.plugin.settings.outputPath)
 					.onChange(async (value) => {
 						this.plugin.settings.outputPath = value;
@@ -132,7 +132,7 @@ export class PerplexityBridgeSettingTab extends PluginSettingTab {
 			.setDesc("Where structured space pages are created.")
 			.addText((text) =>
 				text
-					.setPlaceholder("wiki/spaces")
+					.setPlaceholder("Example: wiki/spaces")
 					.setValue(this.plugin.settings.spacesOutputPath)
 					.onChange(async (value) => {
 						this.plugin.settings.spacesOutputPath = value;
@@ -145,7 +145,7 @@ export class PerplexityBridgeSettingTab extends PluginSettingTab {
 			.setDesc("Where artifacts and companion notes are stored.")
 			.addText((text) =>
 				text
-					.setPlaceholder("raw/perplexity")
+					.setPlaceholder("Example: raw/perplexity")
 					.setValue(this.plugin.settings.rawSourcesPath)
 					.onChange(async (value) => {
 						this.plugin.settings.rawSourcesPath = value;
