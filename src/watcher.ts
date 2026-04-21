@@ -9,6 +9,7 @@ import {
 	renderSpacePages,
 } from "./space-processor";
 import { ArtifactHandler } from "./artifact-handler";
+import { checkCloudEgress } from "./privacy-gate";
 
 /**
  * Watches import folders for new Perplexity exports and
@@ -212,6 +213,12 @@ export class ResearchWatcher {
 		const thread = parsePerplexityThread(content);
 
 		if (this.settings.autoStructure) {
+			const proceed = await checkCloudEgress(
+				this.app,
+				file.path,
+				"cloud:anthropic"
+			);
+			if (!proceed) return;
 			const research = await structureResearch(thread, this.settings);
 			const wikiPage = renderResearchPage(research);
 
@@ -249,6 +256,12 @@ export class ResearchWatcher {
 		const space = parseSpaceFromMarkdown(content, spaceName);
 
 		if (this.settings.autoStructure) {
+			const proceed = await checkCloudEgress(
+				this.app,
+				file.path,
+				"cloud:anthropic"
+			);
+			if (!proceed) return;
 			const structured = await structureSpace(space, this.settings);
 			const pages = renderSpacePages(structured);
 

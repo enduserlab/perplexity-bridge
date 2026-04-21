@@ -12,6 +12,7 @@ import { ResearchModal } from "./research-modal";
 import type { ResearchRequest } from "./research-modal";
 import { parsePerplexityThread } from "./parser";
 import { structureResearch, renderResearchPage } from "./structurer";
+import { checkCloudEgress } from "./privacy-gate";
 
 export default class PerplexityBridgePlugin extends Plugin {
 	settings: PerplexityBridgeSettings = DEFAULT_SETTINGS;
@@ -75,7 +76,7 @@ export default class PerplexityBridgePlugin extends Plugin {
 		this.addCommand({
 			id: "research-selection",
 			name: "Research selected text",
-			editorCallback: (editor) => {
+			editorCallback: (editor, view) => {
 				if (!this.settings.perplexityApiKey) {
 					new Notice(
 						"Set your API key in settings."
@@ -87,7 +88,18 @@ export default class PerplexityBridgePlugin extends Plugin {
 					new Notice("No text selected.");
 					return;
 				}
-				this.openResearchModal(false, selection);
+				const sourcePath = view.file?.path;
+				void (async () => {
+					if (sourcePath) {
+						const proceed = await checkCloudEgress(
+							this.app,
+							sourcePath,
+							"cloud:perplexity"
+						);
+						if (!proceed) return;
+					}
+					this.openResearchModal(false, selection);
+				})();
 			},
 		});
 
@@ -116,6 +128,12 @@ export default class PerplexityBridgePlugin extends Plugin {
 			name: "Structure current file as research",
 			editorCallback: async (_editor, view) => {
 				if (view.file) {
+					const proceed = await checkCloudEgress(
+						this.app,
+						view.file.path,
+						"cloud:anthropic"
+					);
+					if (!proceed) return;
 					new Notice("Structuring...");
 					await this.watcher?.processFileByPath(view.file.path);
 				}
